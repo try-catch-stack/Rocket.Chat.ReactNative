@@ -135,7 +135,7 @@
 		"ua-parser-js": "^0.7.24",
 		"url-parse": "1.5.6",
 		"use-deep-compare-effect": "1.6.1",
-		"xregexp": "5.0.2"
+		"xregexp": "5.1.1"
 	},
 	"resolutions": {
 		"ua-parser-js": "^0.7.24"
