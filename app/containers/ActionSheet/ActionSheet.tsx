@@ -140,7 +140,7 @@ const ActionSheet = React.memo(
 						style={{ ...styles.container, ...bottomSheet }}
 						backgroundStyle={{ backgroundColor: colors.focusedBackground }}
 						onChange={index => index === -1 && onClose()}
-						activeOffsetY={[-1, 1]}
+						activeOffsetY={[-5, 5]}
 						failOffsetX={[-5, 5]}
 						{...androidTablet}>
 						<BottomSheetContent options={data?.options} hide={hide} children={data?.children} hasCancel={data?.hasCancel} />
