@@ -171,8 +171,8 @@ interface IRoomViewProps extends IBaseScreen<ChatsStackParamList, 'RoomView'> {
 	transferLivechatGuestPermission?: string[]; // TODO: Check if its the correct type
 	viewCannedResponsesPermission?: string[]; // TODO: Check if its the correct type
 	livechatAllowManualOnHold?: boolean;
-	showActionSheet?: (options: TActionSheetOptions) => void;
-	hideActionSheet?: () => void;
+	showActionSheet: (options: TActionSheetOptions) => void;
+	hideActionSheet: () => void;
 }
 
 interface IRoomViewState {
@@ -827,20 +827,19 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 	showReactionPicker = () => {
 		const { showActionSheet, width, height } = this.props;
 		const { reacting, selectedMessage } = this.state;
-		showActionSheet &&
-			showActionSheet({
-				children: (
-					<ReactionPicker
-						show={reacting}
-						message={selectedMessage}
-						onEmojiSelected={this.onReactionPress}
-						reactionClose={this.onReactionClose}
-						width={width}
-						height={height}
-					/>
-				),
-				snaps: [400, '100%']
-			});
+		showActionSheet({
+			children: (
+				<ReactionPicker
+					show={reacting}
+					message={selectedMessage}
+					onEmojiSelected={this.onReactionPress}
+					reactionClose={this.onReactionClose}
+					width={width}
+					height={height}
+				/>
+			),
+			snaps: [400, '100%']
+		});
 	};
 
 	onReactionInit = (message: TAnyMessageModel) => {

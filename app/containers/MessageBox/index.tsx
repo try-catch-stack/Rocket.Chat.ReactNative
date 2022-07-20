@@ -171,7 +171,7 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 
 	private typingTimeout: any;
 
-	private emojiSearchbarRef: any;
+	private emojiSearchbarRef: React.RefObject<RNTextInput>;
 
 	static defaultProps = {
 		message: {
@@ -609,7 +609,7 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 			case EventTypes.SEARCH_PRESSED:
 				this.setState({ showEmojiKeyboard: false, showEmojiSearchbar: true });
 				setTimeout(() => {
-					this.emojiSearchbarRef.current.focus();
+					this.emojiSearchbarRef.current?.focus();
 				}, 400);
 				break;
 			default:
@@ -907,6 +907,7 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 	openEmoji = () => {
 		logEvent(events.ROOM_OPEN_EMOJI);
 		this.setState({ showEmojiKeyboard: true, showEmojiSearchbar: false });
+		this.stopTrackingMention();
 	};
 
 	recordingCallback = (recording: any) => {
