@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Keyboard, NativeModules, Text, View, TextInput as RNTextInput } from 'react-native';
+import { Alert, Keyboard, NativeModules, Text, View, TextInput as RNTextInput, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAccessoryView } from 'react-native-ui-lib/keyboard';
 import ImagePicker, { Image, ImageOrVideo, Options } from 'react-native-image-crop-picker';
@@ -225,6 +225,8 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 			...videoPickerConfig,
 			...libPickerLabels
 		};
+
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	async componentDidMount() {
@@ -439,6 +441,7 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 		if (isTablet) {
 			EventEmiter.removeListener(KEY_COMMAND, this.handleCommands);
 		}
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	setOptions = async () => {
@@ -1141,6 +1144,15 @@ class MessageBox extends Component<IMessageBoxProps, IMessageBoxState> {
 				onEmojiSelected={onEmojiSelected}
 			/>
 		) : null;
+	};
+
+	handleBackPress = () => {
+		const { showEmojiSearchbar } = this.state;
+		if (showEmojiSearchbar) {
+			this.setState({ showEmojiSearchbar: false });
+			return true;
+		}
+		return false;
 	};
 
 	renderContent = () => {
