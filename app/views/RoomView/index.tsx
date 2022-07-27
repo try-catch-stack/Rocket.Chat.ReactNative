@@ -562,6 +562,7 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 		let avatar: string | undefined;
 		let visitor: IVisitor | undefined;
 		let sourceType: IOmnichannelSource | undefined;
+		let departmentId: string | undefined;
 		if ('id' in room) {
 			subtitle = room.topic;
 			t = room.t;
@@ -571,6 +572,7 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 			({ id: userId, token } = user);
 			avatar = room.name;
 			visitor = room.visitor;
+			departmentId = room.departmentId;
 		}
 
 		if ('source' in room) {
@@ -635,6 +637,7 @@ class RoomView extends React.Component<IRoomViewProps, IRoomViewState> {
 					encrypted={encrypted}
 					navigation={navigation}
 					toggleFollowThread={this.toggleFollowThread}
+					departmentId={departmentId}
 				/>
 			)
 		});
