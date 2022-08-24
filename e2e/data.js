@@ -4,7 +4,7 @@ const account = require('./e2e_account');
 
 const value = random(20);
 const data = {
-	server: 'https://mobile.rocket.chat',
+	server: 'http://localhost:3000',
 	...account,
 	alternateServer: 'https://stable.rocket.chat',
 	users: {

@@ -1,39 +1,28 @@
 import React from 'react';
 import { View } from 'react-native';
 import { KeyboardRegistry } from 'react-native-ui-lib/keyboard';
+import { Provider } from 'react-redux';
 
-import { store } from '../../lib/store/auxStore';
+import store from '../../lib/store';
 import EmojiPicker from '../EmojiPicker';
 import styles from './styles';
-import { themes } from '../../lib/constants';
-import { TSupportedThemes, withTheme } from '../../theme';
+import { useTheme } from '../../theme';
+import { EventTypes } from '../EmojiPicker/interfaces';
 
-interface IMessageBoxEmojiKeyboard {
-	theme: TSupportedThemes;
-}
+const EmojiKeyboard = () => {
+	const { colors } = useTheme();
 
-export default class EmojiKeyboard extends React.PureComponent<IMessageBoxEmojiKeyboard, any> {
-	private readonly baseUrl: string;
-
-	constructor(props: IMessageBoxEmojiKeyboard) {
-		super(props);
-		const state = store.getState();
-		this.baseUrl = state.share.server.server || state.server.server;
-	}
-
-	onEmojiSelected = (emoji: string) => {
-		KeyboardRegistry.onItemSelected('EmojiKeyboard', { emoji });
+	const onItemClicked = (eventType: EventTypes, emoji: string | undefined) => {
+		KeyboardRegistry.onItemSelected('EmojiKeyboard', { eventType, emoji });
 	};
 
-	render() {
-		const { theme } = this.props;
-		return (
-			<View
-				style={[styles.emojiKeyboardContainer, { borderTopColor: themes[theme].borderColor }]}
-				testID='messagebox-keyboard-emoji'>
-				<EmojiPicker onEmojiSelected={this.onEmojiSelected} baseUrl={this.baseUrl} theme={theme} />
+	return (
+		<Provider store={store}>
+			<View style={[styles.emojiKeyboardContainer, { borderTopColor: colors.borderColor }]} testID='messagebox-keyboard-emoji'>
+				<EmojiPicker onItemClicked={onItemClicked} isEmojiKeyboard={true} />
 			</View>
-		);
-	}
-}
-KeyboardRegistry.registerKeyboard('EmojiKeyboard', () => withTheme(EmojiKeyboard));
+		</Provider>
+	);
+};
+
+KeyboardRegistry.registerKeyboard('EmojiKeyboard', () => EmojiKeyboard);

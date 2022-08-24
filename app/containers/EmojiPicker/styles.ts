@@ -8,14 +8,13 @@ export default StyleSheet.create({
 	},
 	tabsContainer: {
 		height: 45,
-		flexDirection: 'row',
-		paddingTop: 5
+		flexDirection: 'row'
 	},
 	tab: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingBottom: 10
+		paddingVertical: 10
 	},
 	tabEmoji: {
 		fontSize: 20,
@@ -54,5 +53,18 @@ export default StyleSheet.create({
 	},
 	customCategoryEmoji: {
 		margin: 8
+	},
+	footerContainer: {
+		height: 44,
+		paddingHorizontal: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+	},
+	footerButtonsContainer: {
+		height: 44,
+		width: 44,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 });

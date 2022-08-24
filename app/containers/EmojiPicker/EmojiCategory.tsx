@@ -1,73 +1,73 @@
 import React from 'react';
-import { FlatList, Text, TouchableOpacity } from 'react-native';
+import { Text, Pressable } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 import shortnameToUnicode from '../../lib/methods/helpers/shortnameToUnicode';
 import styles from './styles';
 import CustomEmoji from './CustomEmoji';
 import scrollPersistTaps from '../../lib/methods/helpers/scrollPersistTaps';
 import { IEmoji, IEmojiCategory } from '../../definitions/IEmoji';
+import { useTheme } from '../../theme';
+import { isIOS } from '../../lib/methods/helpers';
 
-const EMOJI_SIZE = 50;
+const MAX_EMOJI_SIZE = 50;
 
-const renderEmoji = (emoji: IEmoji, size: number, baseUrl: string) => {
-	if (emoji && emoji.isCustom) {
+interface IEmojiProps {
+	emoji: string | IEmoji;
+	size: number;
+	baseUrl: string;
+}
+
+const Emoji = React.memo(({ emoji, size, baseUrl }: IEmojiProps) => {
+	if (typeof emoji === 'string')
 		return (
-			<CustomEmoji
-				style={[styles.customCategoryEmoji, { height: size - 16, width: size - 16 }]}
-				emoji={emoji}
-				baseUrl={baseUrl}
-			/>
+			<Text style={[styles.categoryEmoji, { height: size, width: size, fontSize: size - 14 }]}>
+				{shortnameToUnicode(`:${emoji}:`)}
+			</Text>
 		);
-	}
 	return (
-		<Text style={[styles.categoryEmoji, { height: size, width: size, fontSize: size - 14 }]}>
-			{shortnameToUnicode(`:${emoji}:`)}
-		</Text>
+		<CustomEmoji style={[styles.customCategoryEmoji, { height: size - 16, width: size - 16 }]} emoji={emoji} baseUrl={baseUrl} />
+	);
+});
+
+const EmojiCategory = ({ baseUrl, onEmojiSelected, emojis, width, tabsCount }: IEmojiCategory): React.ReactElement | null => {
+	const emojiSize = width ? Math.min(width / tabsCount, MAX_EMOJI_SIZE) : MAX_EMOJI_SIZE;
+	const numColumns = Math.trunc(width ? width / emojiSize : tabsCount);
+	const { colors } = useTheme();
+
+	const renderItem = (emoji: IEmoji | string) => (
+		<Pressable
+			key={typeof emoji === 'string' ? emoji : emoji.content}
+			onPress={() => onEmojiSelected(emoji)}
+			testID={`reaction-picker-${typeof emoji === 'string' ? emoji : emoji.content}`}
+			android_ripple={{ color: colors.bannerBackground, borderless: true, radius: emojiSize / 2 }}
+			style={({ pressed }: { pressed: boolean }) => ({
+				backgroundColor: isIOS && pressed ? colors.bannerBackground : 'transparent'
+			})}>
+			<Emoji emoji={emoji} size={emojiSize} baseUrl={baseUrl} />
+		</Pressable>
+	);
+
+	if (!width) {
+		return null;
+	}
+
+	return (
+		<FlatList
+			// rerender FlatList in case of width changes
+			key={`emoji-category-${width}`}
+			// @ts-ignore
+			keyExtractor={item => (item?.isCustom && item.content) || item}
+			data={emojis}
+			extraData={{ baseUrl, width }}
+			renderItem={({ item }) => renderItem(item)}
+			numColumns={numColumns}
+			initialNumToRender={45}
+			removeClippedSubviews
+			{...scrollPersistTaps}
+			keyboardDismissMode={'none'}
+		/>
 	);
 };
-
-class EmojiCategory extends React.Component<IEmojiCategory> {
-	renderItem(emoji: IEmoji) {
-		const { baseUrl, onEmojiSelected } = this.props;
-		return (
-			<TouchableOpacity
-				activeOpacity={0.7}
-				// @ts-ignore
-				key={emoji && emoji.isCustom ? emoji.content : emoji}
-				onPress={() => onEmojiSelected(emoji)}
-				testID={`reaction-picker-${emoji && emoji.isCustom ? emoji.content : emoji}`}>
-				{renderEmoji(emoji, EMOJI_SIZE, baseUrl)}
-			</TouchableOpacity>
-		);
-	}
-
-	render() {
-		const { emojis, width } = this.props;
-
-		if (!width) {
-			return null;
-		}
-
-		const numColumns = Math.trunc(width / EMOJI_SIZE);
-		const marginHorizontal = (width - numColumns * EMOJI_SIZE) / 2;
-
-		return (
-			<FlatList
-				contentContainerStyle={{ marginHorizontal }}
-				// rerender FlatList in case of width changes
-				key={`emoji-category-${width}`}
-				// @ts-ignore
-				keyExtractor={item => (item && item.isCustom && item.content) || item}
-				data={emojis}
-				extraData={this.props}
-				renderItem={({ item }) => this.renderItem(item)}
-				numColumns={numColumns}
-				initialNumToRender={45}
-				removeClippedSubviews
-				{...scrollPersistTaps}
-			/>
-		);
-	}
-}
 
 export default EmojiCategory;
