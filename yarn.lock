@@ -4026,10 +4026,10 @@
   dependencies:
     eslint-plugin-import "^2.17.2"
 
-"@rocket.chat/message-parser@0.30.0":
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/@rocket.chat/message-parser/-/message-parser-0.30.0.tgz#63a25aa7fa17724d55db80f95f7f8d6a99ae42ff"
-  integrity sha512-pI7ajaojv+GqhQBMnFiBOWerE7zIlJywWFaLzJlIC/wsJ9LgX6YaKY2wqc909nkr+E4qZY1luJ61ErXGGSF9Zw==
+"@rocket.chat/message-parser@0.31.22":
+  version "0.31.22"
+  resolved "https://registry.yarnpkg.com/@rocket.chat/message-parser/-/message-parser-0.31.22.tgz#fcb523e17c9b336e0d654a19af800bc405b66872"
+  integrity sha512-9cLiihz+zim0ZGpzvNFXMlFzl5R8Eq8j6b47zaF4DACX7KVFGI0vts1SJ9HNTIZ0EWezznP948IGq5t3uy/1Lg==
 
 "@rocket.chat/sdk@RocketChat/Rocket.Chat.js.SDK#mobile":
   version "1.3.0-mobile"
